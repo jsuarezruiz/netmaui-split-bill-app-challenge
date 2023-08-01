@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView 
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="SplitBillApp.Views.Templates.PendingBillFriendTemplate"
+    xmlns:converters="clr-namespace:SplitBillApp.Converters">
+    <ContentView.Resources>
+        <ResourceDictionary>
+
+            <converters:FriendIdToMarginConverter x:Key="FriendIdToMarginConverter" />
+
+            <Style x:Key="FriendBorderStyle" TargetType="Border">
+                <Setter Property="StrokeShape" Value="Ellipse" />
+                <Setter Property="Stroke" Value="White" />
+                <Setter Property="StrokeThickness" Value="2" />
+                <Setter Property="HeightRequest" Value="32" />
+                <Setter Property="WidthRequest" Value="32" />
+            </Style>
+
+        </ResourceDictionary>
+    </ContentView.Resources>
+    <Border
+        Margin="{Binding Id, Converter={StaticResource FriendIdToMarginConverter}, ConverterParameter=12}"
+        Style="{StaticResource FriendBorderStyle}">
+        <Image
+            Source="{Binding Image}"/>
+    </Border>
+</ContentView>

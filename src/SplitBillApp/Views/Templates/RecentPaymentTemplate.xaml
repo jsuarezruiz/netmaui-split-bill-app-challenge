@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView 
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="SplitBillApp.Views.Templates.RecentPaymentTemplate"
+    xmlns:converters="clr-namespace:SplitBillApp.Converters">
+    <ContentView.Resources>
+        <ResourceDictionary>
+           
+            <Style x:Key="RecentPaymentBorderStyle" TargetType="Border">
+                <Setter Property="StrokeShape" Value="RoundRectangle 12" />
+                <Setter Property="Background" Value="White" />
+                <Setter Property="HeightRequest" Value="72" />
+            </Style>
+
+            <Color x:Key="RecentPaymentIconBorderColor">#F2F2F2</Color>
+            
+            <Style x:Key="RecentPaymentIconBorderStyle" TargetType="Border">
+                <Setter Property="StrokeShape" Value="Ellipse" />
+                <Setter Property="Background" Value="{StaticResource RecentPaymentIconBorderColor}" />
+                <Setter Property="VerticalOptions" Value="Center" />
+                <Setter Property="HeightRequest" Value="48" />
+                <Setter Property="WidthRequest" Value="48" />
+                <Setter Property="Margin" Value="0, 0, 12, 0" />
+            </Style>
+            
+            <Style x:Key="IconStyle" TargetType="Image">
+                <Setter Property="Aspect" Value="AspectFit" />
+                <Setter Property="WidthRequest" Value="20" />
+                <Setter Property="HorizontalOptions" Value="Center" />
+                <Setter Property="VerticalOptions" Value="Center" />
+            </Style>
+            
+            <Style x:Key="DescriptionStyle" TargetType="Label">
+                <Setter Property="TextColor" Value="Black" />
+                <Setter Property="FontFamily" Value="MulishBold" />
+                <Setter Property="FontSize" Value="14" />
+            </Style>
+            
+            <Style x:Key="DateStyle" TargetType="Label">
+                <Setter Property="TextColor" Value="#9F9F9F" />
+                <Setter Property="FontFamily" Value="MulishRegular" />
+                <Setter Property="FontSize" Value="12" />
+            </Style>
+
+            <Style x:Key="PriceStyle" TargetType="Label"
+                   BasedOn="{StaticResource DescriptionStyle}" />
+            
+            <Style x:Key="PersonsStyle" TargetType="Label"
+                   BasedOn="{StaticResource DateStyle}" />
+
+        </ResourceDictionary>
+    </ContentView.Resources>
+    <Border
+        Style="{StaticResource RecentPaymentBorderStyle}">
+        <Grid
+            ColumnDefinitions="Auto, *, Auto"
+            RowDefinitions="Auto, Auto"
+            Padding="12">
+            <Border
+                Grid.RowSpan="2"
+                Style="{StaticResource RecentPaymentIconBorderStyle}">
+                <Image
+                    Source="{Binding Icon}"
+                    Style="{StaticResource IconStyle}"/>
+            </Border>
+            <Label 
+                Grid.Column="1"
+                Text="{Binding Description}"
+                Style="{StaticResource DescriptionStyle}"/>
+            <Label 
+                Grid.Column="1"
+                Grid.Row="1"
+                Text="{Binding Date}"
+                Style="{StaticResource DateStyle}"/>
+            <Label 
+                Grid.Column="2"
+                Text="{Binding Price, StringFormat='${0:F2}'}"
+                Style="{StaticResource PriceStyle}"/>
+            <Label 
+                Grid.Column="2"
+                Grid.Row="1"
+                Text="{Binding Persons, StringFormat='{0} Persons'}" 
+                Style="{StaticResource PersonsStyle}"/>
+        </Grid>
+    </Border>
+</ContentView>

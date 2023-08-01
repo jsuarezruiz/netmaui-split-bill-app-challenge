@@ -1,0 +1,525 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage 
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="SplitBillApp.Views.MainView" 
+    xmlns:converters="clr-namespace:SplitBillApp.Converters"   
+    xmlns:templates="clr-namespace:SplitBillApp.Views.Templates"   
+    Shell.NavBarIsVisible="False"  
+    Background="{StaticResource GradientBackground}"
+    Title="Split Bill">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+
+            <Color x:Key="BackgroundStartColor">#CCC5C5</Color>
+            <Color x:Key="BackgroundEndColor">#DDD8D8</Color>
+
+            <converters:FriendIdToMarginConverter x:Key="FriendIdToMarginConverter" />
+            
+            <LinearGradientBrush x:Key="GradientBackground"
+                                 StartPoint="0, 0"
+                                 EndPoint="0, 1">
+                <LinearGradientBrush.GradientStops>
+                    <GradientStop Color="{StaticResource BackgroundStartColor}" Offset="0" />
+                    <GradientStop Color="{StaticResource BackgroundEndColor}" Offset="1" />
+                </LinearGradientBrush.GradientStops>
+            </LinearGradientBrush>
+            
+            <Style x:Key="ToolbarTransparentButtonStyle" TargetType="Border">
+                <Setter Property="StrokeShape" Value="Ellipse" />
+                <Setter Property="Background" Value="Transparent" />
+                <Setter Property="Stroke" Value="Black" />
+                <Setter Property="StrokeThickness" Value="1" />
+                <Setter Property="VerticalOptions" Value="Center" />
+                <Setter Property="HeightRequest" Value="40" />
+                <Setter Property="WidthRequest" Value="40" />
+            </Style>
+            
+            <Style x:Key="ToolbarButtonStyle" TargetType="Border">
+                <Setter Property="StrokeShape" Value="Ellipse" />
+                <Setter Property="Background" Value="White" />
+                <Setter Property="StrokeThickness" Value="0" />
+                <Setter Property="VerticalOptions" Value="Center" />
+                <Setter Property="HeightRequest" Value="40" />
+                <Setter Property="WidthRequest" Value="40" />
+            </Style>
+            
+            <Style x:Key="ToolbarIconStyle" TargetType="Image">
+                <Setter Property="Aspect" Value="AspectFit" />
+                <Setter Property="WidthRequest" Value="20" />
+            </Style>
+
+            <Style x:Key="MyBalanceHeaderStyle" TargetType="Border">
+                <Setter Property="Background" Value="Transparent" />
+                <Setter Property="Stroke" Value="Black" />
+                <Setter Property="StrokeThickness" Value="1" />
+                <Setter Property="HorizontalOptions" Value="Start" />
+                <Setter Property="WidthRequest" Value="100" />
+            </Style>
+
+            <Style x:Key="MyBalanceContentStyle" TargetType="Border">
+                <Setter Property="Background" Value="Transparent" />
+                <Setter Property="Stroke" Value="Black" />
+                <Setter Property="StrokeThickness" Value="1" />
+            </Style>
+
+            <Style x:Key="MyBalanceHeaderTextStyle" TargetType="Label">
+                <Setter Property="TextColor" Value="Black" />
+                <Setter Property="FontFamily" Value="MulishRegular" />
+                <Setter Property="FontSize" Value="12" />
+                <Setter Property="HorizontalOptions" Value="Center" />
+            </Style>
+
+            <Style x:Key="MyBalanceContentTextStyle" TargetType="Label">
+                <Setter Property="TextColor" Value="Black" />
+                <Setter Property="FontFamily" Value="MulishBold" />
+                <Setter Property="FontSize" Value="24" />
+                <Setter Property="FontAttributes" Value="Bold" />
+                <Setter Property="VerticalOptions" Value="Center" />
+            </Style>
+            
+            <Style x:Key="MyBalanceContentArrowStyle" TargetType="Image">
+                <Setter Property="Aspect" Value="AspectFit" />
+                <Setter Property="HorizontalOptions" Value="Center" />
+                <Setter Property="HeightRequest" Value="60" />
+                <Setter Property="VerticalOptions" Value="End" />
+            </Style>
+
+            <Style x:Key="HeaderStyle" TargetType="Label">
+                <Setter Property="TextColor" Value="Black" />
+                <Setter Property="FontFamily" Value="MulishRegular" />
+                <Setter Property="VerticalOptions" Value="Center" />
+                <Setter Property="Margin" Value="0, 12" />
+            </Style>
+            
+            <Style x:Key="SeeAllStyle" TargetType="Label">
+                <Setter Property="TextColor" Value="Black" />
+                <Setter Property="FontSize" Value="Micro" />
+                <Setter Property="FontFamily" Value="MulishRegular" />
+                <Setter Property="HorizontalOptions" Value="End" />
+                <Setter Property="VerticalOptions" Value="Center" />
+                <Setter Property="Margin" Value="0, 12" />
+            </Style>
+
+            <Style x:Key="PendingBillBorderStyle" TargetType="Border">
+                <Setter Property="StrokeShape" Value="RoundRectangle 12" />
+                <Setter Property="Background" Value="Transparent" />
+                <Setter Property="StrokeThickness" Value="1" />
+                <Setter Property="HeightRequest" Value="220" />
+                <Setter Property="WidthRequest" Value="220" />
+            </Style>
+
+            <Style x:Key="PendingBillTitleStyle" TargetType="Label">
+                <Setter Property="FontSize" Value="14" />
+                <Setter Property="FontFamily" Value="MulishRegular" />
+            </Style>
+
+            <Style x:Key="PendingBillPriceStyle" TargetType="Label">
+                <Setter Property="FontSize" Value="16" />
+                <Setter Property="FontFamily" Value="MulishRegular" />
+                <Setter Property="FontAttributes" Value="Bold" />
+                <Setter Property="Margin" Value="0, 4" />
+            </Style>
+
+            <Style x:Key="PendingBillSplitWithStyle" TargetType="Label">
+                <Setter Property="FontSize" Value="10" />
+                <Setter Property="FontFamily" Value="MulishRegular" />
+            </Style>
+
+            <Style x:Key="PendingBillSplitNowButtonStyle" TargetType="Button">
+                <Setter Property="TextColor" Value="Black" />
+                <Setter Property="CornerRadius" Value="12" />
+                <Setter Property="FontSize" Value="12" />
+                <Setter Property="WidthRequest" Value="100" />
+            </Style>
+
+            <LinearGradientBrush x:Key="PendingBillGradientBackground1"
+                     StartPoint="0, 0"
+                     EndPoint="1, 1">
+                <LinearGradientBrush.GradientStops>
+                    <GradientStop Color="#373133" Offset="0.5" />
+                    <GradientStop Color="#3D3A3C" Offset="1" />
+                </LinearGradientBrush.GradientStops>
+            </LinearGradientBrush>
+            
+            <LinearGradientBrush x:Key="PendingBillGradientBackground2"
+                     StartPoint="0, 0"
+                     EndPoint="1, 1">
+                <LinearGradientBrush.GradientStops>
+                    <GradientStop Color="#CCC7C8" Offset="0.5" />
+                    <GradientStop Color="#D7D2D2" Offset="1" />
+                </LinearGradientBrush.GradientStops>
+            </LinearGradientBrush>
+
+            <Style x:Key="PendingBillSplitPeopleBackgroundStyle" TargetType="Border">
+                <Setter Property="StrokeShape" Value="RoundRectangle 24" />
+                <Setter Property="Background" Value="{StaticResource PendingBillGradientBackground1}" />
+                <Setter Property="HeightRequest" Value="40" />
+            </Style>
+
+            <Style x:Key="PendingBillSplitPeoplePlusEllipseStyle" TargetType="Ellipse">
+                <Setter Property="Stroke" Value="White" />
+                <Setter Property="StrokeThickness" Value="1" />
+                <Setter Property="HeightRequest" Value="34" />
+                <Setter Property="WidthRequest" Value="34" />
+                <Setter Property="HorizontalOptions" Value="End" />
+                <Setter Property="Margin" Value="2" />
+            </Style>
+
+            <Style x:Key="PendingBillSplitPeoplePlusTextStyle" TargetType="Label">
+                <Setter Property="FontSize" Value="24" />
+                <Setter Property="HorizontalOptions" Value="Center" />
+                <Setter Property="VerticalOptions" Value="Center" />
+            </Style>
+
+            <Style x:Key="PendingBillDelayButtonStyle" TargetType="Border">
+                <Setter Property="StrokeShape" Value="RoundRectangle 12" />
+                <Setter Property="HeightRequest" Value="40" />
+                <Setter Property="WidthRequest" Value="40" />
+                <Setter Property="Margin" Value="6, 0" />
+            </Style>
+            
+            <Style x:Key="NearbyFriendBorderStyle" TargetType="Border">
+                <Setter Property="StrokeShape" Value="Ellipse" />
+                <Setter Property="Background" Value="{StaticResource AccentBrush}" />
+                <Setter Property="StrokeThickness" Value="0" />
+                <Setter Property="HeightRequest" Value="60" />
+                <Setter Property="WidthRequest" Value="60" />
+                <Setter Property="VerticalOptions" Value="Center" />
+            </Style>
+
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <ScrollView>
+        <Grid 
+            RowDefinitions="Auto, Auto, Auto, Auto, Auto"
+            Padding="12">
+            <!-- TOOLBAR -->
+            <Grid
+                ColumnDefinitions="Auto, *">
+                <Border
+                    Style="{StaticResource ToolbarTransparentButtonStyle}">
+                    <Image
+                        Source="dots.png"
+                        Style="{StaticResource ToolbarIconStyle}"/>
+                </Border>
+                <HorizontalStackLayout
+                    Grid.Column="1"
+                    HorizontalOptions="End">
+                    <Border
+                        Style="{StaticResource ToolbarButtonStyle}">
+                        <Image
+                            Source="search.png"
+                            Style="{StaticResource ToolbarIconStyle}"/>
+                    </Border>
+                    <Border
+                        Margin="-12, 0, 0, 0"
+                        Style="{StaticResource ToolbarButtonStyle}">
+                        <Image 
+                            Source="notification.png"
+                            Style="{StaticResource ToolbarIconStyle}"/>
+                    </Border>
+                </HorizontalStackLayout>
+            </Grid>
+            <!-- MY BALANCE -->
+            <Grid
+                Grid.Row="1"
+                RowDefinitions="Auto, Auto"
+                RowSpacing="0"
+                Margin="0, 12">
+                <Grid.GestureRecognizers>
+                    <!-- TODO: Navigate -->
+                    <TapGestureRecognizer />
+                </Grid.GestureRecognizers>
+                <Border
+                    Style="{StaticResource MyBalanceHeaderStyle}">
+                    <Border.StrokeShape>
+                        <RoundRectangle 
+                            CornerRadius="12, 12, 0, 0"/>
+                    </Border.StrokeShape>
+                    <Grid
+                        Padding="12">
+                        <Label
+                            Text="My Balance"
+                            Style="{StaticResource MyBalanceHeaderTextStyle}"/>
+                    </Grid>
+                </Border>
+                <Border
+                    Grid.Row="1"
+                    Margin="0, -4, 0, 0"
+                    Style="{StaticResource MyBalanceContentStyle}">
+                    <Border.StrokeShape>
+                        <RoundRectangle 
+                            CornerRadius="0, 12, 12, 12"/>
+                    </Border.StrokeShape>
+                    <Grid
+                        ColumnDefinitions="Auto, *"
+                        Padding="12">
+                        <Label 
+                            Text="$20,505.00"
+                            Style="{StaticResource MyBalanceContentTextStyle}"/>
+                        <Image
+                            Grid.Column="1"
+                            Source="arrow.png"
+                            Style="{StaticResource MyBalanceContentArrowStyle}"/>
+                    </Grid>
+                </Border>
+            </Grid>
+            <!-- PENDING BILLS -->
+            <Grid
+                Grid.Row="2"
+                RowDefinitions="Auto, *">
+                <Label 
+                    Text="Pending Bills"
+                    Style="{StaticResource HeaderStyle}"/>
+                <!-- ISCLIPPEDTOBOUNDS NOT WORKING -->
+                <!--
+                <ScrollView     
+                    Grid.Row="1"
+                    Orientation="Horizontal"
+                    IsClippedToBounds="False"
+                    HorizontalScrollBarVisibility="Default"
+                    VerticalScrollBarVisibility="Never">
+                -->
+                    <Grid  
+                        Grid.Row="1"
+                        ColumnDefinitions="Auto, Auto">
+                        <Border
+                            Style="{StaticResource PendingBillBorderStyle}">
+                            <Border.Background>
+                                <LinearGradientBrush
+                                    StartPoint="0, 0"
+                                    EndPoint="1, 0">
+                                    <LinearGradientBrush.GradientStops>
+                                        <GradientStop Color="#0D0207" Offset="0" />
+                                        <GradientStop Color="#353435" Offset="1"/>
+                                    </LinearGradientBrush.GradientStops>
+                                </LinearGradientBrush>
+                            </Border.Background>
+                            <Grid
+                                RowDefinitions="Auto, Auto, Auto, *"
+                                Padding="12">
+                                <Label 
+                                    Text="Birthday Party!"
+                                    TextColor="White"
+                                    Style="{StaticResource PendingBillTitleStyle}"/>
+                                <Label 
+                                    Grid.Row="1"
+                                    Text="$1200.00"
+                                    TextColor="White"
+                                    Style="{StaticResource PendingBillPriceStyle}"/>
+                                <Grid
+                                    Grid.Row="2"
+                                    RowDefinitions="Auto, *"
+                                    Margin="0, 12">
+                                    <Label 
+                                        Text="Split With"
+                                        Style="{StaticResource PendingBillSplitWithStyle}"/>
+                                    <Grid
+                                        Grid.Row="1">
+                                        <Border
+                                            Style="{StaticResource PendingBillSplitPeopleBackgroundStyle}">
+                                            <Grid
+                                                ColumnDefinitions="*, Auto">
+                                                <HorizontalStackLayout
+                                                    Grid.Column="0"
+                                                    BindableLayout.ItemsSource="{Binding Friends}"
+                                                    Margin="6, 0">
+                                                    <BindableLayout.ItemTemplate>
+                                                        <DataTemplate>
+                                                            <templates:PendingBillFriendTemplate />
+                                                        </DataTemplate>
+                                                    </BindableLayout.ItemTemplate>
+                                                </HorizontalStackLayout>
+                                                <Ellipse
+                                                    Grid.Column="1"
+                                                    Style="{StaticResource PendingBillSplitPeoplePlusEllipseStyle}"/>
+                                            <Label
+                                                Grid.Column="1" 
+                                                Text="+"
+                                                TextColor="White"
+                                                Style="{StaticResource PendingBillSplitPeoplePlusTextStyle}"/>
+                                        </Grid>
+                                        </Border>
+                                    </Grid>
+                                </Grid>
+                                <Grid
+                                    Grid.Row="3"
+                                    ColumnDefinitions="Auto, Auto"
+                                    HorizontalOptions="Center"
+                                    VerticalOptions="Center">
+                                    <Button 
+                                        Text="Split Now"
+                                        Background="White"
+                                        Style="{StaticResource PendingBillSplitNowButtonStyle}"/>
+                                    <Border
+                                        Grid.Column="1"
+                                        Background="{StaticResource PendingBillGradientBackground1}"
+                                        Style="{StaticResource PendingBillDelayButtonStyle}">
+                                        <Image 
+                                            WidthRequest="20"
+                                            Source="clock.png" />
+                                    </Border>
+                                </Grid>
+                            </Grid>
+                        </Border>
+                        <Border
+                            Grid.Column="1"
+                            Rotation="-10"
+                            TranslationY="-15"
+                            Stroke="White" 
+                            Style="{StaticResource PendingBillBorderStyle}">
+                            <Border.Shadow>
+                                <Shadow
+                                    Brush="White"
+                                    Radius="12"
+                                    Opacity="0.25"/>
+                            </Border.Shadow>
+                            <Border.Background>
+                                <LinearGradientBrush 
+                                    StartPoint="0, 0"
+                                    EndPoint="1, 0">
+                                    <LinearGradientBrush.GradientStops>
+                                        <GradientStop Color="#B6B1B1" />
+                                        <GradientStop Color="#D7D2D2" />
+                                    </LinearGradientBrush.GradientStops>
+                                </LinearGradientBrush>
+                            </Border.Background>
+                            <Grid
+                                RowDefinitions="Auto, Auto, Auto, *"
+                                Padding="12">
+                                <Label 
+                                    Text="Christmas Celebration"
+                                    TextColor="Black"
+                                    Style="{StaticResource PendingBillTitleStyle}"/>
+                                <Label 
+                                    Grid.Row="1"
+                                    Text="$100.00"
+                                    TextColor="Black"
+                                    Style="{StaticResource PendingBillPriceStyle}"/>
+                                <Grid
+                                    Grid.Row="2"
+                                    RowDefinitions="Auto, *"
+                                    Margin="0, 12">
+                                    <Label 
+                                        Text="Split With"
+                                        TextColor="Black"
+                                        Style="{StaticResource PendingBillSplitWithStyle}"/>
+                                    <Grid
+                                        Grid.Row="1">
+                                        <Border
+                                            Background="{StaticResource PendingBillGradientBackground2}"
+                                            Style="{StaticResource PendingBillSplitPeopleBackgroundStyle}">
+                                            <Grid
+                                                ColumnDefinitions="*, Auto">
+                                                <HorizontalStackLayout
+                                                    Grid.Column="0"
+                                                    BindableLayout.ItemsSource="{Binding Friends}"
+                                                    Margin="6, 0">
+                                                    <BindableLayout.ItemTemplate>
+                                                        <DataTemplate>
+                                                            <templates:PendingBillFriendTemplate />
+                                                        </DataTemplate>
+                                                    </BindableLayout.ItemTemplate>
+                                                </HorizontalStackLayout>
+                                                <Ellipse
+                                                    Grid.Column="1"
+                                                    Style="{StaticResource PendingBillSplitPeoplePlusEllipseStyle}"/>
+                                                <Label
+                                                    Grid.Column="1" 
+                                                    Text="+"
+                                                    TextColor="Black"
+                                                    Style="{StaticResource PendingBillSplitPeoplePlusTextStyle}"/>
+                                        </Grid>
+                                        </Border>
+                                    </Grid>
+                                </Grid>
+                                <Grid
+                                    Grid.Row="3"
+                                    ColumnDefinitions="Auto, Auto"
+                                    HorizontalOptions="Center"
+                                    VerticalOptions="Center">
+                                    <Button 
+                                        Text="Split Now"
+                                        Background="#E0DCDC"
+                                        Style="{StaticResource PendingBillSplitNowButtonStyle}"/>
+                                    <Border
+                                        Grid.Column="1"
+                                        Background="{StaticResource PendingBillGradientBackground2}"
+                                        Style="{StaticResource PendingBillDelayButtonStyle}">
+                                        <Image 
+                                            WidthRequest="20"
+                                            Source="clock.png" />
+                                    </Border>
+                                </Grid>
+                            </Grid>
+                        </Border>
+                    </Grid>
+                <!--
+                </ScrollView>
+                -->
+            </Grid>
+            <!-- NEARBY FRIENDS -->
+            <Grid
+                Grid.Row="3"
+                RowDefinitions="Auto, *">
+                <Label 
+                    Text="Nearby Friends"
+                    Style="{StaticResource HeaderStyle}"/>
+                <Grid
+                    Grid.Row="1"
+                    ColumnDefinitions="Auto, *">
+                    <Border
+                        Style="{StaticResource NearbyFriendBorderStyle}">
+                        <Image
+                            WidthRequest="32"
+                            Source="add.png"/>
+                    </Border>
+                    <ScrollView
+                        Grid.Column="1" 
+                        HeightRequest="80"
+                        Orientation="Horizontal">
+                        <StackLayout
+                            Orientation="Horizontal"
+                            BindableLayout.ItemsSource="{Binding Friends}">
+                            <BindableLayout.ItemTemplate>
+                                <DataTemplate>
+                                    <templates:NearByFriendTemplate />
+                                </DataTemplate>
+                            </BindableLayout.ItemTemplate>
+                        </StackLayout>
+                    </ScrollView>
+                </Grid>
+            </Grid>
+            <!-- RECENT PAYMENTS -->
+            <Grid
+                Grid.Row="4"
+                RowDefinitions="Auto, *">
+                <Grid
+                    ColumnDefinitions="Auto, *">
+                    <Label 
+                        Text="Recent Payments"
+                        Style="{StaticResource HeaderStyle}"/>
+                    <Label 
+                        Grid.Column="1"
+                        Text="See All"
+                        Style="{StaticResource SeeAllStyle}"/>
+                </Grid>
+                <CollectionView 
+                    Grid.Row="1"
+                    ItemsSource="{Binding RecentPayments}">
+                    <CollectionView.ItemsLayout>
+                        <LinearItemsLayout 
+                            Orientation="Vertical"
+                            ItemSpacing="10" />
+                    </CollectionView.ItemsLayout>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <templates:RecentPaymentTemplate />
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </Grid>
+        </Grid>
+    </ScrollView>
+</ContentPage>
