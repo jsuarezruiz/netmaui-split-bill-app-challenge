@@ -284,6 +284,7 @@
                     <Grid  
                         Grid.Row="1"
                         ColumnDefinitions="Auto, Auto">
+                        <!-- TODO: Create custom control -->
                         <Border
                             Style="{StaticResource PendingBillBorderStyle}">
                             <Border.Background>
